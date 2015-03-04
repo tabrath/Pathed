@@ -1,0 +1,55 @@
+﻿<Window x:Class="Pathed.Views.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:vm="clr-namespace:Pathed.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras"
+        xmlns:vw="clr-namespace:Pathed.Views"
+        Title="{Binding Title}"
+        Height="{Binding WindowHeight, Mode=TwoWay}"
+        Width="{Binding WindowWidth, Mode=TwoWay}"
+        Top="{Binding WindowTop, Mode=TwoWay}"
+        Left="{Binding WindowLeft, Mode=TwoWay}"
+        WindowState="{Binding WindowState, Mode=TwoWay}"
+        WindowStartupLocation="CenterScreen" MinWidth="150" MinHeight="150" >
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <cmd:EventToCommand Command="{Binding ClosingEvent}"
+                                        PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="32"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Target:" Grid.Row="0" Grid.Column="0" />
+        <ComboBox ItemsSource="{Binding TargetsView}" IsSynchronizedWithCurrentItem="True" Grid.Row="1" Grid.Column="0" Margin="5">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:EnvironmentTargetViewModel}">
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDirty}" Value="True">
+                                        <Setter Property="TextBlock.Text" Value="{Binding Target, StringFormat={}{0}*}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDirty}" Value="False">
+                                        <Setter Property="TextBlock.Text" Value="{Binding Target}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <vw:EnvironmentTargetView DataContext="{Binding TargetsView.CurrentItem}" Grid.Row="2" Grid.ColumnSpan="2" />
+    </Grid>
+</Window>
