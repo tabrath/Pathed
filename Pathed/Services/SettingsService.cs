@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pathed.Services
 {
@@ -80,7 +77,7 @@ namespace Pathed.Services
         public void OnImportsSatisfied()
         {
             this.properties = new Dictionary<string, object>();
-            var title = this.applicationService.GetTitle();
+            var title = this.applicationService.Title;
             this.filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create),
                 title, title + ".settings");
             this.serializer = new BinaryFormatter();

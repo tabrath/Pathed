@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,7 +46,7 @@ namespace Pathed.Services
             }
         }
 
-        public void Watch(string name, EnvironmentVariableTarget target, Action<string, EnvironmentVariableTarget> action = null)
+        public void Watch(string name, EnvironmentVariableTarget target, Action<string, EnvironmentVariableTarget> action)
         {
             Watcher watcher;
             if (TryGetWatcher(name, target, out watcher))

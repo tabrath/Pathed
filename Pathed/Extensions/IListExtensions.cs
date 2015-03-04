@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pathed
 {
@@ -12,6 +8,12 @@ namespace Pathed
     {
         public static void Add<T>(this IList<T> list, IEnumerable<T> items)
         {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
+            if (items == null)
+                throw new ArgumentNullException("items");
+
             foreach (var item in items.ToArray())
             {
                 list.Add(item);
@@ -20,6 +22,12 @@ namespace Pathed
 
         public static void Remove<T>(this IList<T> list, IEnumerable<T> items)
         {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
+            if (items == null)
+                throw new ArgumentNullException("items");
+
             foreach (var item in items.ToArray())
             {
                 list.Remove(item);
@@ -28,6 +36,12 @@ namespace Pathed
 
         public static void Update<T>(this IList<T> list, IEnumerable<T> items)
         {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
+            if (items == null)
+                throw new ArgumentNullException("items");
+
             var removed = list.Where(x => !items.Contains(x)).ToArray();
             var added = items.Where(x => !list.Contains(x)).ToArray();
 
@@ -38,6 +52,12 @@ namespace Pathed
         public static bool TryGetDifference<T>(this IList<T> list, IEnumerable<T> items, out IEnumerable<T> added, out IEnumerable<T> removed,
             Func<IEnumerable<T>, T, bool> predicate)
         {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
+            if (items == null)
+                throw new ArgumentNullException("items");
+
             removed = list.Where(x => !predicate(items, x)).ToArray();
             added = items.Where(x => !predicate(list, x)).ToArray();
 

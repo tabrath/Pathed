@@ -4,7 +4,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:vm="clr-namespace:Pathed.ViewModels"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:vw="clr-namespace:Pathed.Views"
         Title="{Binding Title}"
         Height="{Binding WindowHeight, Mode=TwoWay}"

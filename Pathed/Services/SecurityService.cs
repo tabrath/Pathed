@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
-using System.Linq;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace Pathed.Services
 {
     [Export(typeof(ISecurityService)), PartCreationPolicy(CreationPolicy.Shared)]
     public class SecurityService : ISecurityService
     {
-        private IApplicationService applicationService;
+        private readonly IApplicationService applicationService;
 
         [ImportingConstructor]
         public SecurityService(IApplicationService applicationService)

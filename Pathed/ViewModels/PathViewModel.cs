@@ -1,10 +1,5 @@
-﻿using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+using GalaSoft.MvvmLight;
 
 namespace Pathed.ViewModels
 {
@@ -60,11 +55,16 @@ namespace Pathed.ViewModels
             }
         }
 
-        public PathViewModel(string value, bool isSet = true)
+        public PathViewModel(string value, bool isSet)
         {
             this.value = value;
             this.isSet = isSet;
             this.isDuplicate = false;
+        }
+
+        public PathViewModel(string value)
+            : this(value, true)
+        {
         }
 
         public override string ToString()

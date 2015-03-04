@@ -1,10 +1,8 @@
-﻿using Pathed.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Pathed.Models;
 
 namespace Pathed.Services
 {
@@ -14,13 +12,13 @@ namespace Pathed.Services
         [Import(typeof(ISettingsService))]
         private ISettingsService settingsService;
 
+        public IEnumerable<PathHistoryEntry> Entries
+        {
+            get { return this.settingsService.Get<PathHistoryEntry[]>("PathHistoryEntries", new PathHistoryEntry[] { }); }
+        }
+
         [ImportingConstructor]
         public PathHistoryService() { }
-
-        public IEnumerable<PathHistoryEntry> GetEntries()
-        {
-            return this.settingsService.Get<PathHistoryEntry[]>("PathHistoryEntries", new PathHistoryEntry[] { });
-        }
 
         public void ClearEntries()
         {
@@ -29,7 +27,7 @@ namespace Pathed.Services
 
         public void ClearEntriesAfter(PathHistoryEntry entry)
         {
-            var entries = GetEntries().ToList();
+            var entries = Entries.ToList();
             var index = entries.IndexOf(entry);
             entries.RemoveRange(index, entries.Count - index);
             this.settingsService.Set<PathHistoryEntry[]>("PathHistoryEntries", entries.ToArray());
@@ -37,7 +35,7 @@ namespace Pathed.Services
 
         public PathHistoryEntry Add(string path, EnvironmentVariableTarget target)
         {
-            var entries = GetEntries().ToList();
+            var entries = Entries.ToList();
             var entry = new PathHistoryEntry(path, target);
             entries.Add(entry);
             this.settingsService.Set<PathHistoryEntry[]>("PathHistoryEntries", entries.ToArray());

@@ -7,7 +7,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:models="clr-namespace:Pathed.Models"
-             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              xmlns:local="clr-namespace:Pathed.Views" x:Class="Pathed.Views.EnvironmentTargetView"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="640" d:DataContext="{d:DesignInstance {x:Type vm:EnvironmentTargetViewModel}, IsDesignTimeCreatable=False}">

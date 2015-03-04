@@ -1,14 +1,9 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Pathed.Services
 {
@@ -48,14 +43,14 @@ namespace Pathed.Services
             Process.Start(path);
         }
 
-        public DialogResult ShowDialog(string caption, string message, DialogButton button)
+        public DialogResult ShowDialog(string caption, string message, DialogButton buttons)
         {
-            return Convert(MessageBox.Show(message, caption, Convert(button)));
+            return Convert(MessageBox.Show(message, caption, Convert(buttons)));
         }
 
-        private static MessageBoxButton Convert(DialogButton button)
+        private static MessageBoxButton Convert(DialogButton buttons)
         {
-            switch (button)
+            switch (buttons)
             {
                 case DialogButton.YesNo:
                     return MessageBoxButton.YesNo;
@@ -70,7 +65,7 @@ namespace Pathed.Services
                     return MessageBoxButton.OKCancel;
 
                 default:
-                    throw new ArgumentException("button");
+                    throw new ArgumentException("Invalid combination of buttons.", "buttons");
             }
         }
 
@@ -94,7 +89,7 @@ namespace Pathed.Services
                     return DialogResult.None;
 
                 default:
-                    throw new ArgumentException("result");
+                    throw new ArgumentException("Invalid message box result.", "result");
             }
         }
     }

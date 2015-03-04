@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Pathed.Services
@@ -14,6 +10,30 @@ namespace Pathed.Services
     {
         [Import(typeof(ISettingsService))]
         private ISettingsService settingsService;
+
+        private string title;
+        public string Title
+        {
+            get
+            {
+                if (this.title == null)
+                    this.title = GetTitle();
+
+                return this.title;
+            }
+        }
+
+        private Version version;
+        public Version Version
+        {
+            get
+            {
+                if (this.version == null)
+                    this.version = GetVersion();
+
+                return this.version;
+            }
+        }
 
         [ImportingConstructor]
         public ApplicationService()
@@ -25,13 +45,13 @@ namespace Pathed.Services
             Application.Current.Shutdown();
         }
 
-        public string GetTitle()
+        private static string GetTitle()
         {
             var asm = Assembly.GetExecutingAssembly();
             return asm.GetCustomAttribute<AssemblyTitleAttribute>().Title;
         }
 
-        public Version GetVersion()
+        private static Version GetVersion()
         {
             var asm = Assembly.GetExecutingAssembly();
             return asm.GetName().Version;

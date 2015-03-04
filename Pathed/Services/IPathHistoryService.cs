@@ -1,15 +1,12 @@
-﻿using Pathed.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Pathed.Models;
 
 namespace Pathed.Services
 {
     public interface IPathHistoryService
     {
-        IEnumerable<PathHistoryEntry> GetEntries();
+        IEnumerable<PathHistoryEntry> Entries { get; }
         void ClearEntries();
         void ClearEntriesAfter(PathHistoryEntry entry);
         PathHistoryEntry Add(string path, EnvironmentVariableTarget target);

@@ -1,15 +1,8 @@
-﻿using Pathed.Services;
-using Pathed.ViewModels;
-using Pathed.Views;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.Composition.Hosting;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
+using Pathed.Views;
 
 namespace Pathed
 {

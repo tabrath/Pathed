@@ -1,8 +1,4 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Pathed.Models;
-using Pathed.Services;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,11 +6,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using Pathed.Models;
+using Pathed.Services;
 
 namespace Pathed.ViewModels
 {
@@ -124,7 +123,7 @@ namespace Pathed.ViewModels
 
             this.watchService.Watch("PATH", this.target, PathChanged);
 
-            this.pathHistory = new ObservableCollection<PathHistoryEntry>(this.pathHistoryService.GetEntries().Where(x => x.Target.Equals(this.target)));
+            this.pathHistory = new ObservableCollection<PathHistoryEntry>(this.pathHistoryService.Entries.Where(x => x.Target.Equals(this.target)));
             BindingOperations.EnableCollectionSynchronization(this.pathHistory, this.pathHistoryLock);
             PathHistoryView = CollectionViewSource.GetDefaultView(this.pathHistory);
         }
@@ -280,6 +279,9 @@ namespace Pathed.ViewModels
 
         public void Open(PathViewModel path)
         {
+            if (path == null)
+                throw new ArgumentNullException("path");
+
             this.dialogService.OpenFolder(path.Value);
         }
 

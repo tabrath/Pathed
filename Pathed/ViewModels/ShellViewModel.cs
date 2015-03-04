@@ -1,30 +1,29 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Pathed.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using Pathed.Services;
 
 namespace Pathed.ViewModels
 {
     [Export, PartCreationPolicy(CreationPolicy.Shared)]
-    public class ShellViewModel : ViewModelBase
+    public class ShellViewModel : ViewModelBase, IPartImportsSatisfiedNotification
     {
-        private IDialogService dialogService;
-        private IEnvironmentService environmentService;
-        private ISecurityService securityService;
-        private IApplicationService applicationService;
-        private ISettingsService settingsService;
-        private IWatchService watchService;
-        private IPathHistoryService pathHistoryService;
+        private readonly IDialogService dialogService;
+        private readonly IEnvironmentService environmentService;
+        private readonly ISecurityService securityService;
+        private readonly IApplicationService applicationService;
+        private readonly ISettingsService settingsService;
+        private readonly IWatchService watchService;
+        private readonly IPathHistoryService pathHistoryService;
 
         private ObservableCollection<EnvironmentTargetViewModel> targets;
         private Object targetsLock = new Object();
@@ -87,8 +86,35 @@ namespace Pathed.ViewModels
             this.settingsService = settingsService;
             this.watchService = watchService;
             this.pathHistoryService = pathHistoryService;
+        }
 
-            Title = String.Format("{0} v{1}", this.applicationService.GetTitle(), this.applicationService.GetVersion().ToString(2));
+        private RelayCommand<CancelEventArgs> closingEvent;
+        public ICommand ClosingEvent
+        {
+            get { return this.closingEvent ?? (this.closingEvent = new RelayCommand<CancelEventArgs>(async (e) => await HandleClosingEvent(e))); }
+        }
+        
+        private async Task HandleClosingEvent(CancelEventArgs args)
+        {
+            if (this.targets.Any(x => x.IsDirty))
+            {
+                var result = this.dialogService.ShowDialog("Pending Changes", "You have unsaved changes, do you want to save before exiting?", DialogButton.YesNoCancel);
+                if (result == DialogResult.Yes)
+                {
+                    foreach (var target in this.targets.Where(x => x.IsDirty))
+                    {
+                        await target.SaveAsync();
+                    }
+                } else if (result == DialogResult.Cancel)
+                {
+                    args.Cancel = true;
+                }
+            }
+        }
+
+        public void OnImportsSatisfied()
+        {
+            Title = String.Format("{0} v{1}", this.applicationService.Title, this.applicationService.Version.ToString(2));
 
             this.targets = new ObservableCollection<EnvironmentTargetViewModel>(CreateEnvironments());
             BindingOperations.EnableCollectionSynchronization(this.targets, this.targetsLock);
@@ -115,30 +141,6 @@ namespace Pathed.ViewModels
                     this.watchService,
                     this.pathHistoryService,
                     (EnvironmentVariableTarget)target);
-            }
-        }
-
-        private RelayCommand<CancelEventArgs> closingEvent;
-        public ICommand ClosingEvent
-        {
-            get { return this.closingEvent ?? (this.closingEvent = new RelayCommand<CancelEventArgs>(async (e) => await HandleClosingEvent(e))); }
-        }
-        
-        private async Task HandleClosingEvent(CancelEventArgs args)
-        {
-            if (this.targets.Any(x => x.IsDirty))
-            {
-                var result = this.dialogService.ShowDialog("Pending Changes", "You have unsaved changes, do you want to save before exiting?", DialogButton.YesNoCancel);
-                if (result == DialogResult.Yes)
-                {
-                    foreach (var target in this.targets.Where(x => x.IsDirty))
-                    {
-                        await target.SaveAsync();
-                    }
-                } else if (result == DialogResult.Cancel)
-                {
-                    args.Cancel = true;
-                }
             }
         }
     }
